@@ -1,0 +1,16 @@
+name: "RanksPM"
+author: "BlckqPlugins"
+main: Rang\Main\Rang
+version: "1.0.0"
+api: [4.0.0]
+commands:
+    rank:
+        description: "Rank Command"
+    nick:
+        description: "Nick Command"
+permissions:
+ nick:
+  description: permission
+  children:
+   nick.set:
+    description: permission
