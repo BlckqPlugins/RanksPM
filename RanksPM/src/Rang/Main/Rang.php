@@ -34,20 +34,18 @@ class Rang extends PluginBase implements Listener {
 		$this->group = new Group($this);
         $this->saveDefaultConfig();
 
-        @mkdir("/home/data/");
-        @mkdir("/home/data/Rank/");
-        @mkdir("/home/data/Rank/Players/");
-
-        @mkdir($this->getDataFolder());
-        @mkdir($this->getDataFolder() . "data/");
-        @mkdir($this->getDataFolder() . "data/Rank/");
-        @mkdir($this->getDataFolder() . "data/Rank/Players/");
-
         self::$pfad = null;
         $config = $this->getConfig();
         if ($config->get("global") === true){
+            @mkdir("/home/data/");
+            @mkdir("/home/data/Rank/");
+            @mkdir("/home/data/Rank/Players/");
             self::$pfad = "/home/data/Rank/";
         } elseif ($config->get("global") === false) {
+            @mkdir($this->getDataFolder());
+            @mkdir($this->getDataFolder() . "data/");
+            @mkdir($this->getDataFolder() . "data/Rank/");
+            @mkdir($this->getDataFolder() . "data/Rank/Players/");
             self::$pfad = ($this->getDataFolder() . "data/Rank/");
         }
 
