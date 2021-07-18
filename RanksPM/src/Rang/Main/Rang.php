@@ -32,20 +32,23 @@ class Rang extends PluginBase implements Listener {
 	
 	public function onEnable(): void{
 		$this->group = new Group($this);
-        $this->saveResource("config.yml", false);
+        $this->saveDefaultConfig();
 
-        self::$pfad = $this->getDataFolder()."data/Rank/";
-        $config = new Config($this->getDataFolder()."config.yml", Config::YAML);
-        if ($config->get("global")){
-            @mkdir("/home/data/");
-            @mkdir("/home/data/Rank/");
-            @mkdir("/home/data/Rank/Players/");
+        @mkdir("/home/data/");
+        @mkdir("/home/data/Rank/");
+        @mkdir("/home/data/Rank/Players/");
+
+        @mkdir($this->getDataFolder());
+        @mkdir($this->getDataFolder() . "data/");
+        @mkdir($this->getDataFolder() . "data/Rank/");
+        @mkdir($this->getDataFolder() . "data/Rank/Players/");
+
+        self::$pfad = null;
+        $config = $this->getConfig();
+        if ($config->get("global") === true){
             self::$pfad = "/home/data/Rank/";
-        } else {
-            @mkdir($this->getDataFolder());
-            @mkdir($this->getDataFolder()."data/Rank/");
-            @mkdir($this->getDataFolder()."data/Rank/Players/");
-            self::$pfad = $this->getDataFolder()."data/Rank/";
+        } elseif ($config->get("global") === false) {
+            self::$pfad = ($this->getDataFolder() . "data/Rank/");
         }
 
         if (!is_file(Rang::$pfad . "nicks.yml")) {

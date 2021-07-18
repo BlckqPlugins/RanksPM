@@ -9,8 +9,6 @@ commands:
     nick:
         description: "Nick Command"
 permissions:
- nick:
-  description: permission
-  children:
-   nick.set:
+  nick.set:
+    default: op
     description: permission
