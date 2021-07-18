@@ -32,12 +32,22 @@ class Rang extends PluginBase implements Listener {
 	
 	public function onEnable(): void{
 		$this->group = new Group($this);
+        $this->saveResource("config.yml", false);
 
-        @mkdir("/home/data/");
-		@mkdir("/home/data/Rank/");
-		@mkdir("/home/data/Rank/Players/");
+        self::$pfad = $this->getDataFolder()."data/Rank/";
+        $config = new Config($this->getDataFolder()."config.yml", Config::YAML);
+        if ($config->get("global")){
+            @mkdir("/home/data/");
+            @mkdir("/home/data/Rank/");
+            @mkdir("/home/data/Rank/Players/");
+            self::$pfad = "/home/data/Rank/";
+        } else {
+            @mkdir($this->getDataFolder());
+            @mkdir($this->getDataFolder()."data/Rank/");
+            @mkdir($this->getDataFolder()."data/Rank/Players/");
+            self::$pfad = $this->getDataFolder()."data/Rank/";
+        }
 
-        self::$pfad = "/home/data/Rank/";
         if (!is_file(Rang::$pfad . "nicks.yml")) {
             $nicks = new Config(Rang::$pfad . "nicks.yml", Config::YAML);
             $nicks->set("Nicks", [
