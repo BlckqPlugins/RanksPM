@@ -37,7 +37,7 @@ class Rang extends PluginBase implements Listener {
         self::$pfad = null;
         $config = $this->getConfig();
 
-        $this->prefix = $config->get("prefix");
+        $this->prefix = $config->get("prefix") ?? "§7[§cRanks§7]";
 
         if ($config->get("global") === true){
             @mkdir("/home/data/");
