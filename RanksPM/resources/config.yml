@@ -1,5 +1,2 @@
 #Enable/Disable global using
 global: false
-
-#Prefix
-prefix: "§7[§cRankSystem§7]"

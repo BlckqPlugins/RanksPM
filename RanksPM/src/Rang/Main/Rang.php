@@ -20,7 +20,7 @@ use pocketmine\command\Command;
 
 class Rang extends PluginBase implements Listener {
 	
-	public $prefix;
+	public $prefix = TextFormat::GRAY . "[" . TextFormat::RED . "RankSystem" . TextFormat::GOLD . "" . TextFormat::GRAY . "] " . TextFormat::RESET;
 	public static $pfad;
 	public $config;
 
@@ -36,15 +36,14 @@ class Rang extends PluginBase implements Listener {
 
         self::$pfad = null;
         $config = $this->getConfig();
-
-        $this->prefix = $config->get("prefix") ?? "§7[§cRanks§7]";
-
-        if ($config->get("global") === true){
+        $global = $config->get("global") ?? false;
+        
+        if ($global){
             @mkdir("/home/data/");
             @mkdir("/home/data/Rank/");
             @mkdir("/home/data/Rank/Players/");
             self::$pfad = "/home/data/Rank/";
-        } elseif ($config->get("global") === false) {
+        } else {
             @mkdir($this->getDataFolder());
             @mkdir($this->getDataFolder() . "data/");
             @mkdir($this->getDataFolder() . "data/Rank/");
