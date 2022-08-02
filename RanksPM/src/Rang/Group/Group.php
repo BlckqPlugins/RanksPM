@@ -36,15 +36,25 @@ class Group implements Listener {
 		}
 		
 	}
+
+    public function addNewGroup(string $group): bool{
+        $groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
+        if(!$groupfile->exists($group)) {
+            $groupfile->setNested($group . ".nametag", "&7[&f{$group}&7] &8%name%");
+            $groupfile->setNested($group . ".chatformat", "&7[&f{$group}&7] &8%name% &7> &f%msg%");
+            $groupfile->setNested($group . ".perms", array("pocketmine.command.transfer"));
+            $groupfile->save();
+            return true;
+        }
+        return false;
+    }
 	
 	public function unregisterPlayer($name)
     {
 		$name = strtolower($name);
 		if (isset($this->plugin->attachments[$name])) {
 			$player = $this->plugin->getServer()->getPlayerExact($name);
-			if($player != null) {
-				$player->removeAttachment($this->plugin->attachments[$name]);
-			}
+            $player?->removeAttachment($this->plugin->attachments[$name]);
             unset($this->plugin->attachments[$name]);
         }
     }
@@ -56,9 +66,7 @@ class Group implements Listener {
 			$player = $this->plugin->getServer()->getPlayerExact($name);
 
             $attachment = null;
-			if($player != null) {
-			   $attachment = $player->addAttachment($this->plugin);
-			}
+            $attachment = $player?->addAttachment($this->plugin);
             $this->plugin->attachments[$name] = $attachment;
         }
         $this->updatePermissions($name);
@@ -95,56 +103,37 @@ class Group implements Listener {
 	public function getChat($name, $msg) {
 		$playerfile = new Config(Rang::$pfad . "Players/" . strtolower($name) . ".yml", Config::YAML);
 		$groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
-		
 		if (!empty($playerfile->get("Group"))) {
 			$group = $playerfile->get("Group");
-			
 			if ($groupfile->getNested($group . ".chatformat") != null) {
-				
 				if($playerfile->get("Nick") != "UNNICKED") {
-					
 					$filechatformat = $groupfile->getNested("Guest.chatformat");
 					$chatformat = str_replace("&", TextFormat::ESCAPE, str_replace("%group%", $group, str_replace("%name%", $playerfile->get("Nick"), str_replace("%msg%", $msg, $filechatformat))));
-					
 				} else {
-					
 					$filechatformat = $groupfile->getNested($group . ".chatformat");
 					$chatformat = str_replace("&", TextFormat::ESCAPE, str_replace("%group%", $group, str_replace("%name%", $name, str_replace("%msg%", $msg, $filechatformat))));
-					
 				}
-				
 				return $chatformat;
 			}
-			
 		}
-		
 	}
 	
 	public function getNameTag($name) {
 		$playerfile = new Config(Rang::$pfad . "Players/" . strtolower($name) . ".yml", Config::YAML);
 		$groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
-		
 		if (!empty($playerfile->get("Group"))) {
 			$group = $playerfile->get("Group");
 			if ($groupfile->getNested($group . ".nametag") != null) {
-				
 				if($playerfile->get("Nick") != "UNNICKED") {
-					
 					$filenametag = $groupfile->getNested("Guest.nametag");
 					$nametag = str_replace("&", TextFormat::ESCAPE, str_replace("%group%", $group, str_replace("%name%", $playerfile->get("Nick"), $filenametag)));
-					
 				} else {
-					
 					$filenametag = $groupfile->getNested($group . ".nametag");
 					$nametag = str_replace("&", TextFormat::ESCAPE, str_replace("%group%", $group, str_replace("%name%", $name, $filenametag)));
-					
 				}
-				
 				return $nametag;
 			}
-			
 		}
-		
 	}
 	
 	public function setGroup($name, $group) {
@@ -157,19 +146,14 @@ class Group implements Listener {
 		return true;
 	}
 	
-	public function addGroup($group) {
-		$groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
-		$groupfile->setNested($group . ".nametag", "&7[&8Guest&7] &8%name%");
-		$groupfile->setNested($group . ".chatformat", "&7[&8Guest&7] &8%name% &7> &f%msg%");
-		$groupfile->setNested($group . ".perms", array("pocketmine.command.transfer"));
-		$groupfile->save();
-		return true;
-	}
-	
 	public function getGroup($name) {
 		$groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
 		$playerfile = new Config(Rang::$pfad . "Players/" . strtolower($name) . ".yml", Config::YAML);
 		return $playerfile->get("Group");
 	}
-	
+
+    public function getAllGroups(): array{
+        $groupfile = new Config(Rang::$pfad . "Groups.yml", Config::YAML);
+        return $groupfile->getAll(true);
+    }
 }

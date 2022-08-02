@@ -54,12 +54,32 @@ class GroupCommand extends Command {
                 } else {
                     $sender->sendMessage(TextFormat::RED . "Usage: /rank set <name> <rank>");
                 }
+            } elseif (strtolower($args[0]) == "add"){
+                if (!empty($args[1])){
+                    if ($this->plugin->group->addNewGroup($args[1])){
+                        $sender->sendMessage($this->plugin->prefix . "§aSuccesfully added the group §e{$args[1]}§8.");
+                    } else {
+                        $sender->sendMessage($this->plugin->prefix . "§cThis group already exists.");
+                    }
+                }
+            } elseif (strtolower($args[0]) == "list"){
+                $message = "§cList of all ranks:\n";
+                foreach ($this->plugin->group->getAllGroups() as $groups){
+                    if (!str_starts_with("DefaultGroup", $groups)) {
+                        $message .= "§7- §e{$groups}§r\n";
+                    }
+                }
+                $sender->sendMessage($message);
             }
             if (strtolower($args[0]) == "help") {
                 $sender->sendMessage($this->plugin->prefix . "-> /rank set <name> <rank>");
+                $sender->sendMessage($this->plugin->prefix . "-> /rank add <groupname>");
+                $sender->sendMessage($this->plugin->prefix . "-> /rank list");
             }
         } else {
             $sender->sendMessage($this->plugin->prefix . "-> /rank set <name> <rank>");
+            $sender->sendMessage($this->plugin->prefix . "-> /rank add <groupname>");
+            $sender->sendMessage($this->plugin->prefix . "-> /rank list");
         }
     }
 
