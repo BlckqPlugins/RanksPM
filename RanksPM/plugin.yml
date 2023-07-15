@@ -2,7 +2,7 @@ name: "RanksPM"
 author: "BlckqPlugins"
 main: Rang\Main\Rang
 version: "1.0.0"
-api: [4.0.0, 5.0.0]
+api: [5.0.0]
 permissions:
   nick.set:
     default: op

@@ -2,6 +2,7 @@
 
 namespace Rang\Listeners;
 
+use pocketmine\player\chat\LegacyRawChatFormatter;
 use Rang\Main\Rang;
 use Rang\Group\Group;
 
@@ -30,7 +31,7 @@ class PlayerChatListener implements Listener {
 		$pw = $event->getMessage();
 		
 		$msg = $pw;	
-		$event->setFormat($this->group->getChat($name, $msg));
+		$event->setFormatter(new LegacyRawChatFormatter($this->group->getChat($name, $msg)));
 		
 	}
 	
